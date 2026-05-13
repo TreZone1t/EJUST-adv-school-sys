@@ -1,0 +1,4 @@
+What is the capital of France?|Paris
+What is 5 * 5?|25
+Which programming language are we using?|Java
+Is the Earth flat? (Yes/No)|No
