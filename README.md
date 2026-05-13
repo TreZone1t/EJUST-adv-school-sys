@@ -1,7 +1,7 @@
 # School Management System (Client-Server Architecture)
 
 ## Overview
-This is a multi-threaded Java Client-Server application designed for managing a school environment. It utilizes object-based communication (`java.io.Serializable`) via TCP sockets to ensure reliable, structured data exchange between the client and the server.
+This is a multi-threaded Java Client-Server application designed for managing a school system. It uses object-based communication by  (`java.io.Serializable`) via TCP sockets.
 
 ## Features
 - **Role-Based Access Control:** Three distinct roles: Manager, Teacher, and Student.
@@ -34,7 +34,6 @@ This is a multi-threaded Java Client-Server application designed for managing a 
    ```
 
 3. **Start the Client:**
-   Open a new terminal and run:
    ```bash
    .\run_client.bat
    ```
