@@ -27,13 +27,12 @@ public class MainUI {
                 // if not logged in, show login menu
                 showLoginMenu();
             } else {
-                // check role and show correct menu
-                String role = loggedInUser.getRole();
-                if (role.equals("MANAGER")) {
+                // check type and show correct menu
+                if (loggedInUser instanceof Manager) {
                     showManagerMenu();
-                } else if (role.equals("TEACHER")) {
+                } else if (loggedInUser instanceof Teacher) {
                     showTeacherMenu();
-                } else if (role.equals("STUDENT")) {
+                } else if (loggedInUser instanceof Student) {
                     showStudentMenu();
                 }
             }
@@ -127,7 +126,15 @@ public class MainUI {
         System.out.print("Name: ");
         String name = scanner.nextLine();
 
-        User newUser = new User(id, role, username, password, name);
+        User newUser;
+        if (role.equals("MANAGER")) {
+            newUser = new Manager(id, username, password, name);
+        } else if (role.equals("TEACHER")) {
+            newUser = new Teacher(id, username, password, name);
+        } else {
+            newUser = new Student(id, username, password, name);
+        }
+        
         Request req = new Request("ADD_USER", newUser);
         Response res = network.sendRequest(req);
         System.out.println(res.getMessage());

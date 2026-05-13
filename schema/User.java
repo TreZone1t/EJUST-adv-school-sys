@@ -2,21 +2,15 @@ package schema;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public abstract class User implements Serializable, CsvExportable {
     private String id;
-    private String role; // "MANAGER", "TEACHER", "STUDENT"
     private String username;
     private String password;
     private String name;
 
-    public User(String id, String role, String username, String password, String name) {
+    public User(String id, String username, String password, String name) {
         // initialize the user attributes
         this.id = id;
-        if (role != null && (role.equals("MANAGER") || role.equals("TEACHER") || role.equals("STUDENT"))) {
-            this.role = role;
-        } else {
-            throw new IllegalArgumentException("Invalid role: " + role);
-        }
         this.username = username;
         this.password = password;
         this.name = name;
@@ -26,9 +20,7 @@ public class User implements Serializable {
         return id;
     }
 
-    public String getRole() {
-        return role;
-    }
+    public abstract String getRole();
 
     public String getUsername() {
         return username;
@@ -42,8 +34,22 @@ public class User implements Serializable {
         return name;
     }
 
+    @Override
     public String toCsv() {
         // convert the user to a csv string
-        return id + "," + role + "," + username + "," + password + "," + name;
+        return id + "," + getRole() + "," + username + "," + password + "," + name;
+    }
+
+    public abstract String[] getAllowedActions();
+
+    public boolean canPerform(String action) {
+        String[] allowedActions = getAllowedActions();
+        if (allowedActions == null)
+            return false;
+        for (String a : allowedActions) {
+            if (a.equals(action))
+                return true;
+        }
+        return false;
     }
 }

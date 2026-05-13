@@ -64,52 +64,64 @@ public class ClientHandler extends Thread {
             return new Response("ERROR", "Wrong username or password", null);
         }
 
+        // authorization check for all other actions
+        try {
+            if (loggedInUser == null || !loggedInUser.canPerform(action)) {
+                throw new Exception("Unauthorized");
+            }
+        } catch (Exception e) {
+            return new Response("ERROR", e.getMessage(), null);
+        }
+
         if (action.equals("LOGOUT")) {
             loggedInUser = null;
             return new Response("SUCCESS", "Logged out", null);
         }
+        try {
+            if (loggedInUser.canPerform(action)) {
 
-        if (action.equals("ADD_USER")) {
-            // check if manager
-            if (loggedInUser != null && loggedInUser.getRole().equals("MANAGER")) {
-                if (dataManager.addUser((User) request.getPayload())) {
-                    return new Response("SUCCESS", "User added", null);
+                if (action.equals("ADD_USER")) {
+                    if (dataManager.addUser((User) request.getPayload())) {
+                        return new Response("SUCCESS", "User added", null);
+                    }
+                    throw new Exception("User already exists");
                 }
-                return new Response("ERROR", "User exists", null);
+
+                if (action.equals("GET_ALL_USERS")) {
+                    ArrayList<User> users = dataManager.getAllUsers();
+                    return new Response("SUCCESS", "Users list", users.toArray(new User[0]));
+                }
+
+                if (action.equals("CREATE_EXAM")) {
+                    dataManager.addExam((Exam) request.getPayload());
+                    return new Response("SUCCESS", "Exam created", null);
+                }
+
+                if (action.equals("GET_ALL_EXAMS")) {
+                    ArrayList<Exam> exams = dataManager.getAllExams();
+                    return new Response("SUCCESS", "Exams list", exams.toArray(new Exam[0]));
+                }
+
+                if (action.equals("SUBMIT_EXAM") || action.equals("UPLOAD_GRADE")) {
+                    dataManager.addGrade((Grade) request.getPayload());
+                    return new Response("SUCCESS", "Grade saved", null);
+                }
+
+                if (action.equals("GET_MY_GRADES")) {
+                    ArrayList<Grade> grades = dataManager.getStudentGrades(loggedInUser.getId());
+                    return new Response("SUCCESS", "My grades", grades.toArray(new Grade[0]));
+                }
+
+                if (action.equals("GET_ALL_GRADES")) {
+                    ArrayList<Grade> grades = dataManager.getAllGrades();
+                    return new Response("SUCCESS", "All grades", grades.toArray(new Grade[0]));
+                }
+
             }
-            return new Response("ERROR", "Unauthorized", null);
+        } catch (Exception e) {
+            return new Response("ERROR", e.getMessage(), null);
         }
-
-        if (action.equals("GET_ALL_USERS")) {
-            ArrayList<User> users = dataManager.getAllUsers();
-            return new Response("SUCCESS", "Users list", users.toArray(new User[0]));
-        }
-
-        if (action.equals("CREATE_EXAM")) {
-            dataManager.addExam((Exam) request.getPayload());
-            return new Response("SUCCESS", "Exam created", null);
-        }
-
-        if (action.equals("GET_ALL_EXAMS")) {
-            ArrayList<Exam> exams = dataManager.getAllExams();
-            return new Response("SUCCESS", "Exams list", exams.toArray(new Exam[0]));
-        }
-
-        if (action.equals("SUBMIT_EXAM") || action.equals("UPLOAD_GRADE")) {
-            dataManager.addGrade((Grade) request.getPayload());
-            return new Response("SUCCESS", "Grade saved", null);
-        }
-
-        if (action.equals("GET_MY_GRADES")) {
-            ArrayList<Grade> grades = dataManager.getStudentGrades(loggedInUser.getId());
-            return new Response("SUCCESS", "My grades", grades.toArray(new Grade[0]));
-        }
-
-        if (action.equals("GET_ALL_GRADES")) {
-            ArrayList<Grade> grades = dataManager.getAllGrades();
-            return new Response("SUCCESS", "All grades", grades.toArray(new Grade[0]));
-        }
-
+        // if the action is not have a case to response to it
         return new Response("ERROR", "Action not allowed", null);
     }
 }

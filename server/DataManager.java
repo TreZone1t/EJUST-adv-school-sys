@@ -22,7 +22,7 @@ public class DataManager {
         loadGrades();
         // if there is no data, add the default data for the manager
         if (users.isEmpty()) {
-            addUser(new User("m1", "MANAGER", "admin", "admin", "System Admin"));
+            users.add(new Manager("m1", "admin", "admin", "System Admin"));
         }
     }
 
@@ -39,7 +39,13 @@ public class DataManager {
             while (sc.hasNextLine()) {
                 String[] p = sc.nextLine().split(",");
                 if (p.length == 5) {
-                    users.add(new User(p[0], p[1], p[2], p[3], p[4]));
+                    if (p[1].equals("MANAGER")) {
+                        users.add(new Manager(p[0], p[2], p[3], p[4]));
+                    } else if (p[1].equals("TEACHER")) {
+                        users.add(new Teacher(p[0], p[2], p[3], p[4]));
+                    } else {
+                        users.add(new Student(p[0], p[2], p[3], p[4]));
+                    }
                 }
             }
             sc.close();

@@ -2,7 +2,7 @@ package schema;
 
 import java.io.Serializable;
 
-public class Grade implements Serializable {
+public class Grade implements Serializable, CsvExportable {
     private String studentId;
     private String examId;
     private double score;
@@ -42,6 +42,7 @@ public class Grade implements Serializable {
         return type;
     }
 
+    @Override
     public String toCsv() {
         // return the grade as a comma separated string
         return studentId + "," + examId + "," + score + "," + maxScore + "," + type;

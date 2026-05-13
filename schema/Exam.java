@@ -3,7 +3,7 @@ package schema;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Exam implements Serializable {
+public class Exam implements Serializable, CsvExportable {
     private String id;
     private String teacherId;
     private String title;
@@ -44,6 +44,7 @@ public class Exam implements Serializable {
         return answers;
     }
 
+    @Override
     public String toCsv() {
         // save exam basic info
         String res = id + "," + teacherId + "," + title + ",";
