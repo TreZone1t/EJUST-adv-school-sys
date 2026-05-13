@@ -14,4 +14,28 @@ public class Teacher extends User {
     public String getRole() {
         return "TEACHER";
     }
+    @Override
+    public int showMenu() {
+        System.out.println("\n<---- Teacher Menu ---->\n");
+        System.out.println("1. Create Exam");
+        System.out.println("2. View All Exams");
+        System.out.println("3. Upload Grade");
+        System.out.println("4. View All Grades");
+        System.out.println("5. Logout");
+        System.out.print("Choice: ");
+        String choice = super.scanner.nextLine();
+        if (choice.equals("1"))
+            return 21;
+        else if (choice.equals("2"))
+            return 22;
+        else if (choice.equals("3"))
+            return 23;
+        else if (choice.equals("4"))
+            return 24;
+        else if (choice.equals("5")) {
+            return 0;
+        } else
+        return -1;
+    }
+
 }

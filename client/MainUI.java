@@ -4,7 +4,6 @@ import schema.*;
 import schema.Network.*;
 import java.io.File;
 import java.util.Scanner;
-
 public class MainUI {
     private ClientNetwork network;
     private Scanner scanner;
@@ -27,18 +26,28 @@ public class MainUI {
                 // if not logged in, show login menu
                 showLoginMenu();
             } else {
-                // check type and show correct menu
-                if (loggedInUser instanceof Manager) {
-                    showManagerMenu();
-                } else if (loggedInUser instanceof Teacher) {
-                    showTeacherMenu();
-                } else if (loggedInUser instanceof Student) {
-                    showStudentMenu();
-                }
+              int choice = loggedInUser.showMenu();
+              switch (choice) {
+                case 0: 
+                    network.sendRequest(new Request("LOGOUT", null));
+                    loggedInUser = null;
+                    break;
+                case 11: addUser(); break;
+                case 12: viewAllUsers(); break;
+                case 13: editGrade(); break;
+                case 21: createExam(); break;
+                case 22: viewAllExams(); break;
+                case 23: uploadExamFromFile(); break;
+                case 24: viewAllGrades(); break;
+                case 31: viewAllExams(); break;
+                case 32: takeExam(); break;
+                case 33: viewMyGrades(); break;
+                default: System.out.println("Invalid choice."); break;
+              }
             }
-        }
+        
     }
-
+    }
     private void showLoginMenu() {
         System.out.println("\n<----Login---->\n");
         System.out.print("Username (type 'exit' to quit): ");
@@ -70,29 +79,6 @@ public class MainUI {
         }
     }
 
-    private void showManagerMenu() {
-        System.out.println("\n<---- Manager Menu ---->\n");
-        System.out.println("1. Add User");
-        System.out.println("2. View All Users");
-        System.out.println("3. Edit Grade");
-        System.out.println("4. Logout");
-        System.out.print("Choice: ");
-
-        // switch based on user choice
-        String choice = scanner.nextLine();
-        if (choice.equals("1"))
-            addUser();
-        else if (choice.equals("2"))
-            viewAllUsers();
-        else if (choice.equals("3"))
-            editGrade();
-        else if (choice.equals("4")) {
-            // tell server we are leaving
-            network.sendRequest(new Request("LOGOUT", null));
-            loggedInUser = null;
-        } else
-            System.out.println("Invalid choice.");
-    }
 
     private void editGrade() {
         System.out.print("Student ID: ");
@@ -149,34 +135,6 @@ public class MainUI {
                 System.out.println(u.toCsv());
             }
         }
-    }
-
-    private void showTeacherMenu() {
-        System.out.println("\n<---- Teacher Menu ---->\n");
-        System.out.println("1. Create Exam");
-        System.out.println("2. Upload Exam from File");
-        System.out.println("3. View All Exams");
-        System.out.println("4. Upload Grade");
-        System.out.println("5. View All Grades");
-        System.out.println("6. Logout");
-        System.out.print("Choice: ");
-
-        String choice = scanner.nextLine();
-        if (choice.equals("1"))
-            createExam();
-        else if (choice.equals("2"))
-            uploadExamFromFile();
-        else if (choice.equals("3"))
-            viewAllExams();
-        else if (choice.equals("4"))
-            editGrade();
-        else if (choice.equals("5"))
-            viewAllGrades();
-        else if (choice.equals("6")) {
-            network.sendRequest(new Request("LOGOUT", null));
-            loggedInUser = null;
-        } else
-            System.out.println("Invalid choice.");
     }
 
     private void uploadExamFromFile() {
@@ -256,28 +214,6 @@ public class MainUI {
                 System.out.println(g.toCsv());
             }
         }
-    }
-
-    private void showStudentMenu() {
-        System.out.println("\n<---- Student Menu ---->\n");
-        System.out.println("1. View Available Exams");
-        System.out.println("2. Take Exam");
-        System.out.println("3. View My Grades");
-        System.out.println("4. Logout");
-        System.out.print("Choice: ");
-
-        String choice = scanner.nextLine();
-        if (choice.equals("1"))
-            viewAllExams();
-        else if (choice.equals("2"))
-            takeExam();
-        else if (choice.equals("3"))
-            viewMyGrades();
-        else if (choice.equals("4")) {
-            network.sendRequest(new Request("LOGOUT", null));
-            loggedInUser = null;
-        } else
-            System.out.println("Invalid choice.");
     }
 
     private void takeExam() {

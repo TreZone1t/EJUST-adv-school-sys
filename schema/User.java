@@ -1,8 +1,11 @@
 package schema;
 
 import java.io.Serializable;
+import java.util.*;
+import client.Menu;
 
-public abstract class User implements Serializable, CsvExportable {
+public abstract class User implements Serializable, CsvExportable , Menu {
+    protected Scanner scanner = new Scanner(System.in);
     private String id;
     private String username;
     private String password;
@@ -51,5 +54,5 @@ public abstract class User implements Serializable, CsvExportable {
                 return true;
         }
         return false;
-    }
+    } 
 }
