@@ -30,6 +30,8 @@ public class ClientHandler extends Thread {
                 Request request = (Request) in.readObject();
                 // if client wants to quit, break the loop
                 if (request.getAction().equals("QUIT")) {
+                    out.writeObject(new Response("SUCCESS", "Goodbye", null));
+                    out.flush();
                     break;
                 }
                 // process the request
@@ -39,8 +41,10 @@ public class ClientHandler extends Thread {
                 out.flush();
                 out.reset();
             }
+            // close socket
+            socket.close();
         } catch (Exception e) {
-            System.out.println("excaeption happend in client handler! : " + e.getMessage());
+            System.out.println("Client disconnected or exception: " + e.getMessage());
         }
     }
 
@@ -58,6 +62,11 @@ public class ClientHandler extends Thread {
                 return new Response("SUCCESS", "Login successful", user);
             }
             return new Response("ERROR", "Wrong username or password", null);
+        }
+
+        if (action.equals("LOGOUT")) {
+            loggedInUser = null;
+            return new Response("SUCCESS", "Logged out", null);
         }
 
         if (action.equals("ADD_USER")) {

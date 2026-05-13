@@ -42,8 +42,15 @@ public class MainUI {
 
     private void showLoginMenu() {
         System.out.println("\n<----Login---->\n");
-        System.out.print("Username: ");
+        System.out.print("Username (type 'exit' to quit): ");
         String username = scanner.nextLine();
+        // if the user typed exit, quit the program
+        if (username.equalsIgnoreCase("exit")) {
+            network.sendRequest(new Request("QUIT", null));
+            System.out.println("Goodbye!");
+            System.exit(0);
+        }
+
         System.out.print("Password: ");
         String password = scanner.nextLine();
 
@@ -82,7 +89,7 @@ public class MainUI {
             editGrade();
         else if (choice.equals("4")) {
             // tell server we are leaving
-            network.sendRequest(new Request("QUIT", null));
+            network.sendRequest(new Request("LOGOUT", null));
             loggedInUser = null;
         } else
             System.out.println("Invalid choice.");
@@ -159,7 +166,7 @@ public class MainUI {
         else if (choice.equals("5"))
             viewAllGrades();
         else if (choice.equals("6")) {
-            network.sendRequest(new Request("QUIT", null));
+            network.sendRequest(new Request("LOGOUT", null));
             loggedInUser = null;
         } else
             System.out.println("Invalid choice.");
@@ -260,7 +267,7 @@ public class MainUI {
         else if (choice.equals("3"))
             viewMyGrades();
         else if (choice.equals("4")) {
-            network.sendRequest(new Request("QUIT", null));
+            network.sendRequest(new Request("LOGOUT", null));
             loggedInUser = null;
         } else
             System.out.println("Invalid choice.");
