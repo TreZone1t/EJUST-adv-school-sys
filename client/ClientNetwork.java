@@ -28,13 +28,15 @@ public class ClientNetwork {
             out.writeObject(request);
             out.flush();
             out.reset();
-            // receive response
+            // receive response and check if a Response object
             return (Response) in.readObject();
         } catch (Exception e) {
             System.out.println("Error sending request: " + e.getMessage());
+            // check if the error is that the server is not running
             if (e.getMessage().equals("Connection refused: connect")) {
                 System.out.println("Server is not running. Please start the server first.");
                 System.out.println("Exiting...");
+                //exit to ensure server will be run first
                 System.exit(1);
             }
             return null;

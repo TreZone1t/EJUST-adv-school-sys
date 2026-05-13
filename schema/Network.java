@@ -27,7 +27,7 @@ public class Network {
     public static class Response implements Serializable {
         private String status; // "SUCCESS" or "ERROR"
         private String message;
-        private Object payload; // data sent back
+        private Object payload; // data sent back or null if there is no data to send back
 
         public Response(String status, String message, Object payload) {
             this.status = status;
