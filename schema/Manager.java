@@ -1,4 +1,5 @@
 package schema;
+
 public class Manager extends User {
     public Manager(String id, String username, String password, String name) {
         super(id, username, password, name);
@@ -13,6 +14,7 @@ public class Manager extends User {
     public String[] getAllowedActions() {
         return new String[] { "ADD_USER", "GET_ALL_USERS", "UPLOAD_GRADE", "LOGOUT", "GET_ALL_GRADES", "QUIT" };
     }
+
     @Override
     public int showMenu() {
         System.out.println("\n<---- Manager Menu ---->\n");
@@ -31,6 +33,6 @@ public class Manager extends User {
         else if (choice.equals("4")) {
             return 0;
         } else
-        return -1;
+            return -1;
     }
 }

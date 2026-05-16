@@ -14,6 +14,7 @@ public class Teacher extends User {
     public String getRole() {
         return "TEACHER";
     }
+
     @Override
     public int showMenu() {
         System.out.println("\n<---- Teacher Menu ---->\n");
@@ -35,7 +36,7 @@ public class Teacher extends User {
         else if (choice.equals("5")) {
             return 0;
         } else
-        return -1;
+            return -1;
     }
 
 }
